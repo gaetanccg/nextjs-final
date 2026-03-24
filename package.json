@@ -11,6 +11,9 @@
         "slicemachine": "start-slicemachine"
     },
     "dependencies": {
+        "@mdx-js/loader": "^3.1.1",
+        "@mdx-js/react": "^3.1.1",
+        "@next/mdx": "^16.2.1",
         "@prismicio/client": "^7.21.6",
         "@prismicio/next": "^2.2.2",
         "@prismicio/react": "^3.4.0",
