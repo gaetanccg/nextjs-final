@@ -22,17 +22,18 @@ export default function RootLayout({
   return (
     <html lang="fr" className={`${inter.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col font-sans">
-        <header className="bg-dark px-6 py-4 flex items-center justify-between">
-          <Link href="/">
+        <header className="bg-dark px-8 py-4 flex items-center justify-between">
+          <Link href="/" className="flex items-center gap-2">
             <Image
               src="/logo.svg"
               alt="DEV"
               width={80}
               height={21}
-              className="invert brightness-0 invert"
+              className="brightness-0 invert"
             />
           </Link>
-          <Link href="/profil">
+          <Link href="/profil" className="flex items-center gap-3">
+            <span className="text-sm font-medium text-white">Gaetan</span>
             <Image
               src="/icons/account.svg"
               alt="Profil"

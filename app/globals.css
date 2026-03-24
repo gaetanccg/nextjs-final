@@ -17,6 +17,6 @@
 }
 
 body {
-  background: var(--light);
+  background: var(--medium);
   color: var(--dark);
 }
