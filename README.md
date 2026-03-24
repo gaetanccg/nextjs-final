@@ -1,36 +1,88 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# DEV - Offres d'emploi
 
-## Getting Started
+Mini-application de gestion d'offres d'emploi, TP de fin de matiere Ynov.
 
-First, run the development server:
+## Lancer le projet
 
 ```bash
+# Installer les dependances
+npm install
+
+# Lancer le serveur de dev
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+
+# Lancer Slice Machine (gestion du contenu Prismic)
+npm run slicemachine
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Le site est accessible sur `http://localhost:3000`, Slice Machine sur `http://localhost:9999`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Variables d'environnement
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Creer un fichier `.env.local` a la racine :
 
-## Learn More
+```
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_USER=email@gmail.com
+SMTP_PASS=xxxx xxxx xxxx xxxx
+SMTP_FROM=email@gmail.com
+```
 
-To learn more about Next.js, take a look at the following resources:
+### Autres commandes
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+npm run build     # Build de production
+npm run lint      # Linting ESLint
+npm run format    # Formatage Prettier
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Stack technique
 
-## Deploy on Vercel
+| Technologie | Utilisation |
+|---|---|
+| **Next.js 16** (App Router) | Framework principal, routing, Server Components, Server Actions |
+| **TypeScript** | Typage global (interfaces `JobData`, `User`, `ApplicationForm`, `AdminEmail`) |
+| **Tailwind CSS 4** | Stylisation de toutes les pages et composants |
+| **Prismic** (via Slice Machine) | CMS headless pour administrer les offres d'emploi |
+| **Zustand** | State management client : favoris (bookmarks) et candidatures, persistance localStorage |
+| **Nodemailer** | Envoi d'emails de candidature via Server Action (SMTP Gmail) |
+| **MDX** | Page mentions legales ecrite en Markdown, rendue avec composants custom |
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Fonctionnalites Next.js utilisees
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+| Fonctionnalite | Ou |
+|---|---|
+| **App Router** | Structure `app/` avec routes dynamiques (`[slug]`, `[tag]`) |
+| **Server Components** | Pages, `JobCard`, `Tag`, `Pagination`, `PageHeader` |
+| **Client Components** | `BookmarkButton`, `ApplicationForm`, `PinnedJobs`, `AppliedJobs`, `BackButton` |
+| **Server Actions** | `app/actions/sendEmail.ts` — envoi d'email cote serveur |
+| **generateMetadata** | Metadata dynamiques sur `/offres/[slug]` et `/tag/[tag]` |
+| **Metadata centralisees** | `app/metadata.ts` — config SEO unique importee par chaque page |
+| **Route Sitemap** | `app/sitemap.ts` — sitemap XML dynamique avec toutes les offres et tags |
+| **Route Robots** | `app/robots.ts` — fichier robots.txt genere |
+| **loading.tsx** | Spinner affiche pendant le chargement des pages |
+| **next/image** | Optimisation des images (hero, icones) |
+| **next/font** | Police Inter chargee via Google Fonts |
+| **MDX** | Support Markdown pour les pages de contenu statique |
+
+## Structure du projet
+
+```
+app/
+├── actions/           # Server Actions (envoi email)
+├── components/        # Composants reutilisables
+├── store/             # Stores Zustand (bookmarks, candidatures)
+├── types/             # Interfaces TypeScript
+├── metadata.ts        # Configuration SEO centralisee
+├── loading.tsx        # Loader global
+├── sitemap.ts         # Sitemap dynamique
+├── robots.ts          # Robots.txt
+├── page.tsx           # Homepage
+├── offres/            # Liste paginee + page detail [slug]
+├── tag/[tag]/         # Filtrage par technologie
+├── profil/            # Offres enregistrees + candidatures
+└── mentions-legales/  # Page MDX
+customtypes/job/       # Definition du custom type Prismic
+prismicio.ts           # Client Prismic + fonctions de recuperation
+```
