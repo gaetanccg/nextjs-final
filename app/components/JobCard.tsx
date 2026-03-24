@@ -11,11 +11,18 @@ interface JobCardProps {
 
 export default function JobCard({ job }: JobCardProps) {
   const data = job.data as unknown as JobData;
-
   const tagsText = data.tags?.map((t) => t.tag).filter(Boolean).join(', ');
+  const isExpired =
+    data.expiration_date && new Date(data.expiration_date) < new Date();
 
   return (
-    <div className="flex flex-col gap-3 rounded-lg bg-white p-6 shadow-sm">
+    <div className={`relative flex flex-col gap-3 rounded-lg bg-white p-6 shadow-sm ${isExpired ? 'opacity-50 grayscale' : ''}`}>
+      {isExpired && (
+        <div className="absolute inset-0 z-10 flex items-center justify-center rounded-lg bg-white/60">
+          <span className="text-sm font-bold text-red-500">Offre expirée</span>
+        </div>
+      )}
+
       <div className="flex items-start justify-between">
         <Link href={`/offres/${job.uid}`} className="flex-1">
           <h3 className="text-xl font-bold leading-none text-dark">

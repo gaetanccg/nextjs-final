@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { sendApplication } from '@/app/actions/sendEmail';
+import { useApplicationStore } from '@/app/store/useApplicationStore';
 
 interface ApplicationFormProps {
   jobId: string;
@@ -12,6 +13,7 @@ export default function ApplicationForm({ jobId, adminEmails }: ApplicationFormP
   const [message, setMessage] = useState('');
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [errorMsg, setErrorMsg] = useState('');
+  const { addApplication } = useApplicationStore();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -23,6 +25,7 @@ export default function ApplicationForm({ jobId, adminEmails }: ApplicationFormP
       if (result.success) {
         setStatus('success');
         setMessage('');
+        addApplication(jobId);
       } else {
         setStatus('error');
         setErrorMsg(result.error || 'Une erreur est survenue.');
