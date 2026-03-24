@@ -5,127 +5,125 @@ import type * as prismic from '@prismicio/client';
 type Simplify<T> = { [KeyType in keyof T]: T[KeyType] };
 
 type PickContentRelationshipFieldData<
-  TRelationship extends
-    | prismic.CustomTypeModelFetchCustomTypeLevel1
-    | prismic.CustomTypeModelFetchCustomTypeLevel2
-    | prismic.CustomTypeModelFetchGroupLevel1
-    | prismic.CustomTypeModelFetchGroupLevel2,
-  TData extends Record<
-    string,
-    prismic.AnyRegularField | prismic.GroupField | prismic.NestedGroupField | prismic.SliceZone
-  >,
-  TLang extends string,
+    TRelationship extends | prismic.CustomTypeModelFetchCustomTypeLevel1
+        | prismic.CustomTypeModelFetchCustomTypeLevel2
+        | prismic.CustomTypeModelFetchGroupLevel1
+        | prismic.CustomTypeModelFetchGroupLevel2,
+    TData extends Record<
+        string,
+        prismic.AnyRegularField | prismic.GroupField | prismic.NestedGroupField | prismic.SliceZone
+    >,
+    TLang extends string,
 > =
-  // Content relationship fields
-  {
-    [TSubRelationship in Extract<
-      TRelationship['fields'][number],
-      prismic.CustomTypeModelFetchContentRelationshipLevel1
+// Content relationship fields
+    {
+        [TSubRelationship in Extract<
+        TRelationship['fields'][number],
+        prismic.CustomTypeModelFetchContentRelationshipLevel1
     > as TSubRelationship['id']]: ContentRelationshipFieldWithData<
-      TSubRelationship['customtypes'],
-      TLang
+        TSubRelationship['customtypes'],
+        TLang
     >;
-  } & // Group
-  {
-    [TGroup in Extract<
-      TRelationship['fields'][number],
-      prismic.CustomTypeModelFetchGroupLevel1 | prismic.CustomTypeModelFetchGroupLevel2
+    } & // Group
+    {
+        [TGroup in Extract<
+        TRelationship['fields'][number],
+        prismic.CustomTypeModelFetchGroupLevel1 | prismic.CustomTypeModelFetchGroupLevel2
     > as TGroup['id']]: TData[TGroup['id']] extends prismic.GroupField<infer TGroupData>
-      ? prismic.GroupField<PickContentRelationshipFieldData<TGroup, TGroupData, TLang>>
-      : never;
-  } & // Other fields
-  {
-    [TFieldKey in Extract<TRelationship['fields'][number], string>]: TFieldKey extends keyof TData
-      ? TData[TFieldKey]
-      : never;
-  };
+        ? prismic.GroupField<PickContentRelationshipFieldData<TGroup, TGroupData, TLang>>
+        : never;
+    } & // Other fields
+    {
+        [TFieldKey in Extract<TRelationship['fields'][number], string>]: TFieldKey extends keyof TData
+        ? TData[TFieldKey]
+        : never;
+    };
 
 type ContentRelationshipFieldWithData<
-  TCustomType extends
-    | readonly (prismic.CustomTypeModelFetchCustomTypeLevel1 | string)[]
-    | readonly (prismic.CustomTypeModelFetchCustomTypeLevel2 | string)[],
-  TLang extends string = string,
+    TCustomType extends | readonly (prismic.CustomTypeModelFetchCustomTypeLevel1 | string)[]
+        | readonly (prismic.CustomTypeModelFetchCustomTypeLevel2 | string)[],
+    TLang extends string = string,
 > = {
-  [ID in Exclude<TCustomType[number], string>['id']]: prismic.ContentRelationshipField<
-    ID,
-    TLang,
-    PickContentRelationshipFieldData<
-      Extract<TCustomType[number], { id: ID }>,
-      Extract<prismic.Content.AllDocumentTypes, { type: ID }>['data'],
-      TLang
-    >
-  >;
+    [ID in Exclude<TCustomType[number], string>['id']]: prismic.ContentRelationshipField<
+        ID,
+        TLang,
+        PickContentRelationshipFieldData<
+            Extract<TCustomType[number], { id: ID }>,
+            Extract<prismic.Content.AllDocumentTypes, { type: ID }>['data'],
+            TLang
+        >
+    >;
 }[Exclude<TCustomType[number], string>['id']];
 
 /**
  * Content for Job documents
  */
 interface JobDocumentData {
-  /**
-   * publication_date field in *Job*
-   *
-   * - **Field Type**: Date
-   * - **Placeholder**: *None*
-   * - **API ID Path**: job.publication_date
-   * - **Tab**: Main
-   * - **Documentation**: https://prismic.io/docs/fields/date
-   */
-  publication_date: prismic.DateField;
+    /**
+     * publication_date field in *Job*
+     *
+     * - **Field Type**: Date
+     * - **Placeholder**: *None*
+     * - **API ID Path**: job.publication_date
+     * - **Tab**: Main
+     * - **Documentation**: https://prismic.io/docs/fields/date
+     */
+    publication_date: prismic.DateField;
 
-  /**
-   * short_desc field in *Job*
-   *
-   * - **Field Type**: Text
-   * - **Placeholder**: *None*
-   * - **API ID Path**: job.short_desc
-   * - **Tab**: Main
-   * - **Documentation**: https://prismic.io/docs/fields/text
-   */
-  short_desc: prismic.KeyTextField;
+    /**
+     * short_desc field in *Job*
+     *
+     * - **Field Type**: Text
+     * - **Placeholder**: *None*
+     * - **API ID Path**: job.short_desc
+     * - **Tab**: Main
+     * - **Documentation**: https://prismic.io/docs/fields/text
+     */
+    short_desc: prismic.KeyTextField;
 
-  /**
-   * long_desc field in *Job*
-   *
-   * - **Field Type**: Rich Text
-   * - **Placeholder**: *None*
-   * - **API ID Path**: job.long_desc
-   * - **Tab**: Main
-   * - **Documentation**: https://prismic.io/docs/fields/rich-text
-   */
-  long_desc: prismic.RichTextField;
+    /**
+     * long_desc field in *Job*
+     *
+     * - **Field Type**: Rich Text
+     * - **Placeholder**: *None*
+     * - **API ID Path**: job.long_desc
+     * - **Tab**: Main
+     * - **Documentation**: https://prismic.io/docs/fields/rich-text
+     */
+    long_desc: prismic.RichTextField;
 
-  /**
-   * tags field in *Job*
-   *
-   * - **Field Type**: Text
-   * - **Placeholder**: *None*
-   * - **API ID Path**: job.tags
-   * - **Tab**: Main
-   * - **Documentation**: https://prismic.io/docs/fields/text
-   */
-  tags: prismic.KeyTextField;
+    /**
+     * tags field in *Job*
+     *
+     * - **Field Type**: Text
+     * - **Placeholder**: *None*
+     * - **API ID Path**: job.tags
+     * - **Tab**: Main
+     * - **Documentation**: https://prismic.io/docs/fields/text
+     */
+    tags: prismic.KeyTextField;
 
-  /**
-   * admin_email field in *Job*
-   *
-   * - **Field Type**: Text
-   * - **Placeholder**: *None*
-   * - **API ID Path**: job.admin_email
-   * - **Tab**: Main
-   * - **Documentation**: https://prismic.io/docs/fields/text
-   */
-  admin_email: prismic.KeyTextField;
+    /**
+     * admin_email field in *Job*
+     *
+     * - **Field Type**: Text
+     * - **Placeholder**: *None*
+     * - **API ID Path**: job.admin_email
+     * - **Tab**: Main
+     * - **Documentation**: https://prismic.io/docs/fields/text
+     */
+    admin_email: prismic.KeyTextField;
 
-  /**
-   * exp_date field in *Job*
-   *
-   * - **Field Type**: Date
-   * - **Placeholder**: *None*
-   * - **API ID Path**: job.exp_date
-   * - **Tab**: Main
-   * - **Documentation**: https://prismic.io/docs/fields/date
-   */
-  exp_date: prismic.DateField;
+    /**
+     * exp_date field in *Job*
+     *
+     * - **Field Type**: Date
+     * - **Placeholder**: *None*
+     * - **API ID Path**: job.exp_date
+     * - **Tab**: Main
+     * - **Documentation**: https://prismic.io/docs/fields/date
+     */
+    exp_date: prismic.DateField;
 }
 
 /**
@@ -138,33 +136,33 @@ interface JobDocumentData {
  * @typeParam Lang - Language API ID of the document.
  */
 export type JobDocument<Lang extends string = string> = prismic.PrismicDocumentWithUID<
-  Simplify<JobDocumentData>,
-  'job',
-  Lang
+    Simplify<JobDocumentData>,
+    'job',
+    Lang
 >;
 
 export type AllDocumentTypes = JobDocument;
 
 declare module '@prismicio/client' {
-  interface CreateClient {
-    (
-      repositoryNameOrEndpoint: string,
-      options?: prismic.ClientConfig
-    ): prismic.Client<AllDocumentTypes>;
-  }
+    interface CreateClient {
+        (
+            repositoryNameOrEndpoint: string,
+            options?: prismic.ClientConfig
+        ): prismic.Client<AllDocumentTypes>;
+    }
 
-  interface CreateWriteClient {
-    (
-      repositoryNameOrEndpoint: string,
-      options: prismic.WriteClientConfig
-    ): prismic.WriteClient<AllDocumentTypes>;
-  }
+    interface CreateWriteClient {
+        (
+            repositoryNameOrEndpoint: string,
+            options: prismic.WriteClientConfig
+        ): prismic.WriteClient<AllDocumentTypes>;
+    }
 
-  interface CreateMigration {
-    (): prismic.Migration<AllDocumentTypes>;
-  }
+    interface CreateMigration {
+        (): prismic.Migration<AllDocumentTypes>;
+    }
 
-  namespace Content {
-    export type { JobDocument, JobDocumentData, AllDocumentTypes };
-  }
+    namespace Content {
+        export type {JobDocument, JobDocumentData, AllDocumentTypes};
+    }
 }
