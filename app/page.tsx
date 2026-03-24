@@ -1,10 +1,14 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import {getLatestJobs} from '@/prismicio';
+import {getLatestJobs, getAllTags} from '@/prismicio';
 import JobCard from './components/JobCard';
+import Tag from './components/Tag';
+import {pageMetadata} from './metadata';
+
+export const metadata = pageMetadata.home;
 
 export default async function Home() {
-    const jobs = await getLatestJobs(6);
+    const [jobs, tags] = await Promise.all([getLatestJobs(6), getAllTags()]);
 
     return (
         <>
@@ -23,7 +27,7 @@ export default async function Home() {
                     Nos dernières opportunités
                 </h1>
                 <div className="h-1 w-1/3 bg-primary" />
-                <div className="mt-2 h-px w-full bg-dark/10" />
+                <div className="h-px bg-dark/10" />
             </section>
 
             <section className="px-8 py-8">
@@ -34,7 +38,7 @@ export default async function Home() {
                 </div>
             </section>
 
-            <div className="flex justify-center pb-12">
+            <div className="flex justify-center pb-8">
                 <Link
                     href="/offres"
                     className="rounded-lg bg-primary px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-primary/90"
@@ -42,6 +46,19 @@ export default async function Home() {
                     Voir toutes les offres
                 </Link>
             </div>
+
+            {tags.length > 0 && (
+                <section className="px-8 pb-12">
+                    <h2 className="text-3xl font-medium leading-none text-dark mb-6">
+                        Explorer par tag
+                    </h2>
+                    <div className="flex flex-wrap gap-3">
+                        {tags.map((tag) => (
+                            <Tag key={tag} label={tag} />
+                        ))}
+                    </div>
+                </section>
+            )}
         </>
     );
 }

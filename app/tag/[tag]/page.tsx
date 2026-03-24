@@ -1,35 +1,59 @@
-import { getJobsByTag } from '@/prismicio';
+import type {Metadata} from 'next';
+import {getJobsByTag} from '@/prismicio';
 import JobCard from '@/app/components/JobCard';
+import Pagination from '@/app/components/Pagination';
+import PageHeader from '@/app/components/PageHeader';
+import BackButton from '@/app/components/BackButton';
+import {tagMetadata} from '@/app/metadata';
+
+const PAGE_SIZE = 6;
+
+export async function generateMetadata({params}: { params: Promise<{ tag: string }> }): Promise<Metadata> {
+    const {tag} = await params;
+    return tagMetadata(decodeURIComponent(tag));
+}
 
 export default async function TagPage({
-  params,
-}: {
-  params: Promise<{ tag: string }>;
+                                          params,
+                                          searchParams,
+                                      }: {
+    params: Promise<{ tag: string }>;
+    searchParams: Promise<{ page?: string }>;
 }) {
-  const { tag } = await params;
-  const decodedTag = decodeURIComponent(tag);
-  const jobs = await getJobsByTag(decodedTag);
+    const {tag} = await params;
+    const {page: pageParam} = await searchParams;
+    const decodedTag = decodeURIComponent(tag);
+    const currentPage = Number(pageParam) || 1;
 
-  return (
-    <div className="px-6 py-12">
-      <div className="mb-8 flex flex-col gap-4">
-        <h1 className="text-5xl font-medium leading-none text-dark">
-          Tag : {decodedTag}
-        </h1>
-        <p className="text-sm font-medium text-dark/60">
-          {jobs.length} offre{jobs.length > 1 ? 's' : ''} trouvée{jobs.length > 1 ? 's' : ''}
-        </p>
-      </div>
+    const allJobs = await getJobsByTag(decodedTag);
+    const totalPages = Math.ceil(allJobs.length / PAGE_SIZE);
+    const jobs = allJobs.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
 
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {jobs.map((job) => (
-          <JobCard key={job.uid} job={job} />
-        ))}
-      </div>
+    return (
+        <div className="px-8 py-12">
+            <BackButton />
 
-      {jobs.length === 0 && (
-        <p className="text-sm font-medium text-dark/60">Aucune offre pour ce tag.</p>
-      )}
-    </div>
-  );
+            <PageHeader
+                title={`Tag : ${decodedTag}`}
+                count={allJobs.length}
+                countLabel={`offre${allJobs.length > 1 ? 's' : ''}`}
+            />
+
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+                {jobs.map((job) => (
+                    <JobCard key={job.uid} job={job} />
+                ))}
+            </div>
+
+            {jobs.length === 0 && (
+                <p className="text-sm font-medium text-dark/60">Aucune offre pour ce tag.</p>
+            )}
+
+            <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                basePath={`/tag/${encodeURIComponent(decodedTag)}`}
+            />
+        </div>
+    );
 }
