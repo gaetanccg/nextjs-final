@@ -3,6 +3,9 @@ import JobCard from '@/app/components/JobCard';
 import Tag from '@/app/components/Tag';
 import Pagination from '@/app/components/Pagination';
 import PageHeader from '@/app/components/PageHeader';
+import {pageMetadata} from '@/app/metadata';
+
+export const metadata = pageMetadata.offres;
 
 const PAGE_SIZE = 6;
 

@@ -3,6 +3,9 @@ import Link from 'next/link';
 import {getLatestJobs, getAllTags} from '@/prismicio';
 import JobCard from './components/JobCard';
 import Tag from './components/Tag';
+import {pageMetadata} from './metadata';
+
+export const metadata = pageMetadata.home;
 
 export default async function Home() {
     const [jobs, tags] = await Promise.all([getLatestJobs(6), getAllTags()]);

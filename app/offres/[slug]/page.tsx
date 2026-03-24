@@ -1,4 +1,6 @@
+import type {Metadata} from 'next';
 import {getJobByUID} from '@/prismicio';
+import {asText} from '@prismicio/client';
 import {PrismicText, PrismicRichText} from '@prismicio/react';
 import Image from 'next/image';
 import type {JobData} from '@/app/types';
@@ -7,6 +9,18 @@ import BookmarkButton from '@/app/components/BookmarkButton';
 import ApplicationForm from '@/app/components/ApplicationForm';
 import BackButton from '@/app/components/BackButton';
 import {notFound} from 'next/navigation';
+import {jobMetadata} from '@/app/metadata';
+
+export async function generateMetadata({params}: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+    const {slug} = await params;
+    try {
+        const job = await getJobByUID(slug);
+        const data = job.data as unknown as JobData;
+        return jobMetadata(asText(data.title), data.short_desc);
+    } catch {
+        return {title: 'Offre introuvable'};
+    }
+}
 
 export default async function SingleJobPage({
                                                 params,

@@ -1,7 +1,7 @@
-import type {Metadata} from 'next';
 import {Inter} from 'next/font/google';
 import Link from 'next/link';
 import Image from 'next/image';
+import {rootMetadata} from './metadata';
 import './globals.css';
 
 const inter = Inter({
@@ -9,10 +9,7 @@ const inter = Inter({
     subsets: ['latin'],
 });
 
-export const metadata: Metadata = {
-    title: 'DEV - Offres d\'emploi',
-    description: 'Plateforme de gestion d\'offres d\'emploi',
-};
+export const metadata = rootMetadata;
 
 export default function RootLayout({
                                        children,

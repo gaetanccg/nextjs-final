@@ -2,6 +2,9 @@ import {getAllJobs} from '@/prismicio';
 import PinnedJobs from '@/app/components/PinnedJobs';
 import AppliedJobs from '@/app/components/AppliedJobs';
 import PageHeader from '@/app/components/PageHeader';
+import {pageMetadata} from '@/app/metadata';
+
+export const metadata = pageMetadata.profil;
 
 export default async function ProfilPage() {
     const allJobs = await getAllJobs();

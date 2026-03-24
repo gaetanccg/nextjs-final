@@ -1,10 +1,17 @@
+import type {Metadata} from 'next';
 import {getJobsByTag} from '@/prismicio';
 import JobCard from '@/app/components/JobCard';
 import Pagination from '@/app/components/Pagination';
 import PageHeader from '@/app/components/PageHeader';
 import BackButton from '@/app/components/BackButton';
+import {tagMetadata} from '@/app/metadata';
 
 const PAGE_SIZE = 6;
+
+export async function generateMetadata({params}: { params: Promise<{ tag: string }> }): Promise<Metadata> {
+    const {tag} = await params;
+    return tagMetadata(decodeURIComponent(tag));
+}
 
 export default async function TagPage({
                                           params,
