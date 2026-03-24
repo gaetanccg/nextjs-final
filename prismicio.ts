@@ -28,8 +28,6 @@ export const createClient = (config: ClientConfig = {}) => {
   return client;
 };
 
-// --- Fonctions utilitaires de récupération ---
-
 export async function getAllJobs() {
   const client = createClient();
   return client.getAllByType('job', {

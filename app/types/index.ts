@@ -1,6 +1,5 @@
 import type { RichTextField } from '@prismicio/client';
 
-// Données Prismic d'un Job (champs data)
 export interface JobData {
   title: RichTextField;
   publication_date: string;
@@ -11,18 +10,15 @@ export interface JobData {
   expiration_date: string;
 }
 
-// Utilisateur (localStorage)
 export interface User {
   pinnedJobIds: string[];
 }
 
-// Formulaire de candidature
 export interface ApplicationForm {
   jobId: string;
   message: string;
 }
 
-// Config email admin
 export interface AdminEmail {
   to: string[];
   subject: string;
